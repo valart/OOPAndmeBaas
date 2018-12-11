@@ -1,8 +1,7 @@
-﻿package sample;
+package sample;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -110,15 +109,25 @@ public class Main extends Application {
 
         Button lisaNupp = new Button("Lisa");
         lisaNupp.setMinSize(90,10);
+        lisaNupp.disableProperty().bind(
+                addFirma.textProperty().isEqualTo("")
+                        .or( addHind.textProperty().isEqualTo("") )
+                        .or( addModel.textProperty().isEqualTo("") )
+                        .or( addSuurus.textProperty().isEqualTo("") ) );
 
         Button saveNupp = new Button("Salvesta");
         saveNupp.setMinSize(90,10);
 
         Button kustutaNupp = new Button("Kustuta");
         kustutaNupp.setMinSize(90,10);
+        kustutaNupp.setDisable(true);
 
         Button kasutamisJuhend = new Button("Abi");
         kasutamisJuhend.setMinSize(90,10);
+
+        tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            kustutaNupp.setDisable(newSelection == null);
+        });
 
         saveNupp.setOnAction(event -> {
             for(int i = 0; i<data.size();i++){
@@ -126,7 +135,7 @@ public class Main extends Application {
                         || !data.get(i).getModel().equals(dataOld.get(i).getModel())
                         || !data.get(i).getSuurus().equals(dataOld.get(i).getSuurus())
                         || !data.get(i).getHind().equals(dataOld.get(i).getHind())) {
-                    
+
                     dataOld = baas.tagastaAndmebaas();
                     String[] vanadAndmed = new String[4];
                     vanadAndmed[0] = dataOld.get(i).getFirma();
@@ -166,12 +175,6 @@ public class Main extends Application {
                 addSuurus.clear();
                 addHind.clear();
                 dataOld.add(new DataItem("","","",""));
-            } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Viga");
-                alert.setHeaderText(null);
-                alert.setContentText("Mingi lahter jäi tühjaks! Proovi uuesti");
-                alert.showAndWait();
             }
         });
 

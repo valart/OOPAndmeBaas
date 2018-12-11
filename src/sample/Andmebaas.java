@@ -153,7 +153,7 @@ public class Andmebaas {
 
     }
 
-    boolean muudaAndmebaas(int indeks, String[] uus) {
+    boolean muudaAndmebaas(int indeks, String[] uus) {//FUnktsioon võtab vastu indeksi ja massiivi ning teeb asendust
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Jalatsid SET Firma=?,Model=?,Suurus=?,Hind=? WHERE id=?");
             preparedStatement.setString(1, uus[0]);
